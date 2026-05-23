@@ -1320,6 +1320,7 @@
               alt="Toyota Hilux 2026"
               loading="eager"
               class="pos-center"
+              style="object-position: 20% center;"
             />
             <img
               src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488577/HD-wallpaper-toyota-hilux-interior-pickup-cars-vehicle_aojhra.jpg"
@@ -1969,6 +1970,20 @@
       dots.forEach((d, i) => d.classList.toggle('active', i === s.current));
     }
     ['ram','hilux','208','tracker','2008'].forEach(id => initGallery(id));
+
+    // ── VIDEO HERO: reanudar al volver al hero ─────────
+    (function(){
+      var v = document.getElementById('heroBgVideo');
+      if(!v) return;
+      var heroObs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){
+            if(v.paused){ v.play().catch(function(){}); }
+          }
+        });
+      }, { threshold: 0.2 });
+      heroObs.observe(document.getElementById('hero'));
+    })();
 
     // ── REVEAL ON SCROLL ───────────────────────────────
     const reveals = document.querySelectorAll('.reveal');
