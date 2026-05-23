@@ -10,6 +10,11 @@
   <meta property="og:description" content="Explorá Córdoba y el interior con la flota más exclusiva de la ciudad. Vehículos 0km, entrega en aeropuerto y atención 24/7."/>
   <meta property="og:type" content="website"/>
   <meta property="og:locale" content="es_AR"/>
+  <!-- Preload del video hero por breakpoint — el navegador descarga solo el que aplica -->
+  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_40,vc_h264,w_480/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(max-width: 600px)"/>
+  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_45,vc_h264,w_768/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(min-width: 601px) and (max-width: 1024px)"/>
+  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_50,vc_h264,w_1280/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(min-width: 1025px)"/>
+  <link rel="preconnect" href="https://res.cloudinary.com"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -184,14 +189,15 @@
     }
     .hero-bg {
       position: absolute; inset: 0;
+      overflow: hidden;
+    }
+    /* Fallback si el video no carga */
+    .hero-bg::before {
+      content: '';
+      position: absolute; inset: 0;
       background-image: url('https://res.cloudinary.com/dvvuwigmy/image/upload/v1779502851/ChatGPT_Image_22_may_2026_04_14_19_p.m._bafls6.png');
       background-size: cover; background-position: center;
-      transform: scale(1.05);
-      animation: heroZoom 22s ease-in-out infinite alternate;
-    }
-    @keyframes heroZoom {
-      0%   { transform: scale(1.05) translateX(0); }
-      100% { transform: scale(1.12) translateX(-2%); }
+      z-index: 0;
     }
     .hero-overlay {
       position: absolute; inset: 0;
@@ -385,7 +391,7 @@
       position: absolute; inset: 0; z-index: 0;
       background-image: url('https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_1400/v1779502851/ChatGPT_Image_22_may_2026_04_14_19_p.m._bafls6.png');
       background-size: cover; background-position: center;
-      opacity: .06;
+      opacity: .18;
       pointer-events: none;
     }
     #flota > * { position: relative; z-index: 1; }
@@ -407,7 +413,25 @@
     .car-card:hover { transform: translateY(-5px); z-index: 2; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
     .car-gallery { position: relative; overflow: hidden; height: 240px; }
     .car-gallery-track { display: flex; height: 100%; transition: transform .5s var(--ease); }
-    .car-gallery-track img { min-width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
+    /* ── Imágenes de galería: centrado y cover correcto ── */
+    .car-gallery-track img {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      flex-shrink: 0;
+    }
+    /* Imágenes que muestran el auto de frente/lateral — centrar verticalmente */
+    .car-gallery-track img.pos-center  { object-position: center center; }
+    .car-gallery-track img.pos-top     { object-position: center top; }
+    .car-gallery-track img.pos-bottom  { object-position: center bottom; }
+    /* En mobile el crop es más agresivo — asegurar que el auto quede centrado */
+    @media (max-width: 600px) {
+      .car-gallery { height: 200px; }
+      .car-gallery-track img { object-position: center center; }
+      .car-gallery-track img.pos-top    { object-position: center 20%; }
+      .car-gallery-track img.pos-bottom { object-position: center 80%; }
+    }
     .car-gallery-dots { position: absolute; bottom: .6rem; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 3; }
     .car-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.4); cursor: none; transition: background .3s, transform .3s; border: none; padding: 0; }
     .car-dot.active { background: var(--gold); transform: scale(1.3); }
@@ -468,7 +492,7 @@
       background-image: url('https://res.cloudinary.com/dvvuwigmy/image/upload/v1779513034/ChatGPT_Image_23_may_2026_02_08_57_ajx8wt.png');
       background-size: cover;
       background-position: center;
-      opacity: 0.12;
+      opacity: 0.28;
       z-index: 0;
     }
     #como-funciona > * { position: relative; z-index: 1; }
@@ -571,6 +595,136 @@
       font-size: .75rem; letter-spacing: .18em; text-transform: uppercase;
       padding: 1rem; cursor: none; font-weight: 500;
       text-decoration: none; margin-top: 1px;
+    }
+
+    /* ─── ATRACCIONES ───────────────────────────── */
+    #atracciones {
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    #atracciones::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 40%; height: 100%;
+      background: linear-gradient(to left, rgba(184,135,58,.04), transparent);
+      pointer-events: none;
+    }
+    .atr-header { margin-bottom: 4rem; max-width: 560px; }
+    .atr-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+    .atr-card {
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+    }
+    .atr-card:not(:last-child) { border-right: 1px solid var(--border); }
+    .atr-img-wrap {
+      position: relative;
+      height: 340px;
+      overflow: hidden;
+    }
+    .atr-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      transition: transform .7s var(--ease);
+      display: block;
+    }
+    .atr-card:hover .atr-img-wrap img { transform: scale(1.06); }
+    .atr-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,.78) 0%, rgba(8,8,8,.15) 55%, transparent 100%);
+    }
+    .atr-number {
+      position: absolute;
+      top: 1.2rem; left: 1.4rem;
+      font-family: var(--serif);
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: rgba(184,135,58,.35);
+      line-height: 1;
+      z-index: 2;
+    }
+    .atr-img-content {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.8rem 2rem;
+      z-index: 2;
+    }
+    .atr-tag {
+      display: inline-block;
+      font-size: .58rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(184,135,58,.5);
+      padding: .2rem .7rem;
+      margin-bottom: .8rem;
+    }
+    .atr-name {
+      font-family: var(--serif);
+      font-size: 1.7rem;
+      font-weight: 300;
+      color: #f5f0eb;
+      line-height: 1.1;
+      margin-bottom: .3rem;
+    }
+    .atr-name em { font-style: italic; color: var(--gold); }
+    .atr-dist {
+      font-size: .68rem;
+      letter-spacing: .1em;
+      color: rgba(245,240,235,.55);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .atr-dist::before { content: '📍'; font-size: .7rem; }
+    .atr-body {
+      padding: 2rem 2rem 2.5rem;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+    }
+    .atr-desc {
+      font-size: .87rem;
+      color: #5a5040;
+      line-height: 1.85;
+      margin-bottom: 1.4rem;
+    }
+    .atr-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .atr-highlight {
+      display: flex;
+      align-items: flex-start;
+      gap: .6rem;
+      font-size: .78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .atr-highlight::before {
+      content: '—';
+      color: var(--gold);
+      flex-shrink: 0;
+      font-family: var(--serif);
+    }
+    /* Mobile */
+    @media (max-width: 900px) {
+      .atr-grid { grid-template-columns: 1fr; }
+      .atr-card:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); }
+      .atr-img-wrap { height: 260px; }
+    }
+    @media (max-width: 600px) {
+      .atr-img-wrap { height: 220px; }
+      .atr-name { font-size: 1.4rem; }
+      .atr-body { padding: 1.4rem 1.4rem 2rem; }
     }
 
     /* ─── FINAL CTA ──────────────────────────────── */
@@ -945,7 +1099,80 @@
 
   <!-- HERO -->
   <section id="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-bg">
+      <video
+        id="heroBgVideo"
+        autoplay
+        muted
+        loop
+        playsinline
+        webkit-playsinline
+        x5-playsinline
+        disablepictureinpicture
+        preload="auto"
+        fetchpriority="high"
+        poster="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_800/v1779502851/ChatGPT_Image_22_may_2026_04_14_19_p.m._bafls6.png"
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;pointer-events:none;z-index:1;background:#000;"
+      >
+        <!-- Mobile: video liviano 480px, carga rápida en 4G/WiFi -->
+        <source
+          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_40,vc_h264,w_480/v1779516396/insta_video_22736_wwun2b.mov"
+          type="video/mp4"
+          media="(max-width: 600px)"
+        />
+        <!-- Tablet: 768px -->
+        <source
+          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_45,vc_h264,w_768/v1779516396/insta_video_22736_wwun2b.mov"
+          type="video/mp4"
+          media="(max-width: 1024px)"
+        />
+        <!-- Desktop: 1280px -->
+        <source
+          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_50,vc_h264,w_1280/v1779516396/insta_video_22736_wwun2b.mov"
+          type="video/mp4"
+        />
+      </video>
+      <!-- Script inline — dispara play() lo antes posible sin esperar ningún evento tardío.
+           En iOS Safari el autoplay solo funciona si muted+playsinline están seteados ANTES de play(). -->
+      <script>
+        (function(){
+          var v = document.getElementById('heroBgVideo');
+          if(!v) return;
+          // Forzar muted antes del play — crítico para iOS Safari
+          v.muted = true;
+          v.defaultMuted = true;
+          v.setAttribute('muted', '');
+          v.setAttribute('playsinline', '');
+
+          function tryPlay(){
+            var p = v.play();
+            if(p && p.catch) p.catch(function(){
+              // Autoplay bloqueado (ej: Low Power Mode iOS) — el poster se mantiene, no pasa nada
+            });
+          }
+
+          // Si ya tiene datos suficientes, reproducir ya
+          if(v.readyState >= 2){
+            tryPlay();
+          } else {
+            // canplaythrough = tiene suficientes datos para reproducir sin interrupciones
+            v.addEventListener('canplaythrough', tryPlay, {once:true, passive:true});
+            // loadeddata = primeros frames disponibles — fallback más rápido
+            v.addEventListener('loadeddata', tryPlay, {once:true, passive:true});
+          }
+
+          // En iOS, a veces hay que llamar load() explícitamente para disparar la descarga
+          if(/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+            v.load();
+          }
+
+          // Seguridad: si en 6s no cargó nada, mostrar solo el poster
+          setTimeout(function(){
+            if(v.readyState < 1) v.style.opacity = '0';
+          }, 6000);
+        })();
+      </script>
+    </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-eyebrow">
@@ -1029,9 +1256,24 @@
       <div class="car-card reveal" data-cat="pickup">
         <div class="car-gallery" id="gallery-ram">
           <div class="car-gallery-track" id="track-ram">
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488578/getImage_aqik1e.webp" alt="RAM Dakota 2026" loading="lazy"/>
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488578/getImage_1_gouhko.webp" alt="RAM Dakota 2026 interior" loading="lazy"/>
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488578/ram-dakota-warlock-2117521_furrtx.jpg" alt="RAM Dakota Warlock" loading="lazy"/>
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/getImage_aqik1e.webp"
+              alt="RAM Dakota 2026"
+              loading="eager"
+              class="pos-center"
+            />
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/getImage_1_gouhko.webp"
+              alt="RAM Dakota 2026 interior"
+              loading="lazy"
+              class="pos-center"
+            />
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/ram-dakota-warlock-2117521_furrtx.jpg"
+              alt="RAM Dakota Warlock"
+              loading="lazy"
+              class="pos-center"
+            />
           </div>
           <button class="car-gallery-nav prev" onclick="slideGallery('ram',-1)">‹</button>
           <button class="car-gallery-nav next" onclick="slideGallery('ram',1)">›</button>
@@ -1065,8 +1307,18 @@
       <div class="car-card reveal reveal-delay-1" data-cat="pickup">
         <div class="car-gallery" id="gallery-hilux">
           <div class="car-gallery-track" id="track-hilux">
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488578/hilux-super-blanco_zeaabj.png" alt="Toyota Hilux 2026" loading="lazy" />
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488577/HD-wallpaper-toyota-hilux-interior-pickup-cars-vehicle_aojhra.jpg" alt="Toyota Hilux 2026 interior" loading="lazy" style="object-fit:cover; object-position: center;"/>
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/hilux-super-blanco_zeaabj.png"
+              alt="Toyota Hilux 2026"
+              loading="eager"
+              class="pos-center"
+            />
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488577/HD-wallpaper-toyota-hilux-interior-pickup-cars-vehicle_aojhra.jpg"
+              alt="Toyota Hilux 2026 interior"
+              loading="lazy"
+              class="pos-center"
+            />
           </div>
           <button class="car-gallery-nav prev" onclick="slideGallery('hilux',-1)">‹</button>
           <button class="car-gallery-nav next" onclick="slideGallery('hilux',1)">›</button>
@@ -1099,8 +1351,18 @@
       <div class="car-card reveal reveal-delay-2" data-cat="auto">
         <div class="car-gallery" id="gallery-208">
           <div class="car-gallery-track" id="track-208">
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488578/imagen_1905_vdx2la.png" alt="Peugeot 208 2026" loading="lazy" />
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488576/nuevo-peugeot-208-2025-argentina-8.jpg_kiytv4.webp" alt="Peugeot 208 2026 interior" loading="lazy" style="object-fit:cover; object-position: center;"/>
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/imagen_1905_vdx2la.png"
+              alt="Peugeot 208 2026"
+              loading="eager"
+              class="pos-center"
+            />
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488576/nuevo-peugeot-208-2025-argentina-8.jpg_kiytv4.webp"
+              alt="Peugeot 208 2026 interior"
+              loading="lazy"
+              class="pos-center"
+            />
           </div>
           <button class="car-gallery-nav prev" onclick="slideGallery('208',-1)">‹</button>
           <button class="car-gallery-nav next" onclick="slideGallery('208',1)">›</button>
@@ -1133,8 +1395,18 @@
       <div class="car-card reveal reveal-delay-1" data-cat="suv">
         <div class="car-gallery" id="gallery-tracker">
           <div class="car-gallery-track" id="track-tracker">
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488577/blancosummitltz_ezveji.avif" alt="Chevrolet Tracker 2026" loading="lazy"/>
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488576/interior-de-la-nueva-chevrolet-tracker-pantalla-superior-e-instrumental-con-dos-cuadrantes-separados-2RXB5THA5SGVPOWF7OLTXIMGRY_k9ebpe.avif" alt="Chevrolet Tracker interior" loading="lazy"/>
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488577/blancosummitltz_ezveji.avif"
+              alt="Chevrolet Tracker 2026"
+              loading="eager"
+              class="pos-center"
+            />
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488576/interior-de-la-nueva-chevrolet-tracker-pantalla-superior-e-instrumental-con-dos-cuadrantes-separados-2RXB5THA5SGVPOWF7OLTXIMGRY_k9ebpe.avif"
+              alt="Chevrolet Tracker interior"
+              loading="lazy"
+              class="pos-center"
+            />
           </div>
           <button class="car-gallery-nav prev" onclick="slideGallery('tracker',-1)">‹</button>
           <button class="car-gallery-nav next" onclick="slideGallery('tracker',1)">›</button>
@@ -1167,8 +1439,18 @@
       <div class="car-card reveal reveal-delay-2" data-cat="suv">
         <div class="car-gallery" id="gallery-2008">
           <div class="car-gallery-track" id="track-2008">
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488576/versiones-allure-mb_atxlbc.avif" alt="Peugeot 2008 2026" loading="lazy"/>
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488577/PEUGEOT-2008-ACTIVE-AT-T200-2025-0Km-18_ldbfxe.webp" alt="Peugeot 2008 detalles" loading="lazy"/>
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488576/versiones-allure-mb_atxlbc.avif"
+              alt="Peugeot 2008 2026"
+              loading="eager"
+              class="pos-center"
+            />
+            <img
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488577/PEUGEOT-2008-ACTIVE-AT-T200-2025-0Km-18_ldbfxe.webp"
+              alt="Peugeot 2008 detalles"
+              loading="lazy"
+              class="pos-center"
+            />
           </div>
           <button class="car-gallery-nav prev" onclick="slideGallery('2008',-1)">‹</button>
           <button class="car-gallery-nav next" onclick="slideGallery('2008',1)">›</button>
@@ -1439,6 +1721,105 @@
           O reservá directamente por WhatsApp
         </a>
       </div>
+    </div>
+  </section>
+
+  <!-- ATRACCIONES -->
+  <section id="atracciones">
+    <div class="atr-header reveal">
+      <div class="section-eyebrow"><span>Explorá Córdoba</span></div>
+      <h2 class="section-title">Las 3 atracciones<br><em>imperdibles</em></h2>
+      <p style="font-size:.9rem;color:var(--muted);margin-top:1rem;line-height:1.8;">
+        Córdoba tiene historia, naturaleza y rutas únicas. Con Easy Drive, cada destino está a minutos de tu auto.
+      </p>
+    </div>
+    <div class="atr-grid reveal">
+
+      <!-- 1 · Quebrada del Condorito -->
+      <div class="atr-card">
+        <div class="atr-img-wrap">
+          <img
+            src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_700,c_fill,g_auto/v1779517873/condor_hwity4.jpg"
+            alt="Quebrada del Condorito, Córdoba"
+            loading="lazy"
+          />
+          <div class="atr-img-overlay"></div>
+          <div class="atr-number">01</div>
+          <div class="atr-img-content">
+            <span class="atr-tag">Naturaleza · Parque Nacional</span>
+            <div class="atr-name">Quebrada del<br><em>Condorito</em></div>
+            <div class="atr-dist">100 km desde Córdoba Capital</div>
+          </div>
+        </div>
+        <div class="atr-body">
+          <p class="atr-desc">
+            Uno de los parques nacionales más espectaculares de Argentina. Hogar del cóndor andino, con cañones de hasta 800 metros de profundidad y senderos únicos entre las sierras.
+          </p>
+          <div class="atr-highlights">
+            <div class="atr-highlight">Mejor acceso con pickup 4×4 o SUV</div>
+            <div class="atr-highlight">Ideal para trekking y avistaje de cóndores</div>
+            <div class="atr-highlight">Ruta de montaña panorámica hasta el ingreso</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 · Alta Gracia -->
+      <div class="atr-card">
+        <div class="atr-img-wrap">
+          <img
+            src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_700,c_fill,g_auto/v1779517873/57154744_10156471537827869_8076038005527150592_n_sqrtlu.jpg"
+            alt="Alta Gracia, Córdoba"
+            loading="lazy"
+          />
+          <div class="atr-img-overlay"></div>
+          <div class="atr-number">02</div>
+          <div class="atr-img-content">
+            <span class="atr-tag">Historia · Cultura</span>
+            <div class="atr-name">Alta<br><em>Gracia</em></div>
+            <div class="atr-dist">38 km desde Córdoba Capital</div>
+          </div>
+        </div>
+        <div class="atr-body">
+          <p class="atr-desc">
+            Ciudad jesuítica declarada Patrimonio de la Humanidad. Casa del Che Guevara, estancia colonial del siglo XVII y el centro más pintoresco de las Sierras Chicas cordobesas.
+          </p>
+          <div class="atr-highlights">
+            <div class="atr-highlight">Estancia Jesuítica — Patrimonio UNESCO</div>
+            <div class="atr-highlight">Museo Casa del Che Guevara</div>
+            <div class="atr-highlight">Acceso fácil por autopista desde Córdoba</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 · Valle de Punilla -->
+      <div class="atr-card">
+        <div class="atr-img-wrap">
+          <img
+            src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_700,c_fill,g_auto/v1779517873/Valle-de-Punilla-scaled-1_qh0zfq.jpg"
+            alt="Valle de Punilla, Córdoba"
+            loading="lazy"
+            style="object-position: center 30%;"
+          />
+          <div class="atr-img-overlay"></div>
+          <div class="atr-number">03</div>
+          <div class="atr-img-content">
+            <span class="atr-tag">Paisajes · Ruta de montaña</span>
+            <div class="atr-name">Valle de<br><em>Punilla</em></div>
+            <div class="atr-dist">80 km desde Córdoba Capital</div>
+          </div>
+        </div>
+        <div class="atr-body">
+          <p class="atr-desc">
+            El valle más largo de Córdoba. Cosquín, La Falda, Carlos Paz — pueblos serranos con ríos, cascadas y la famosa Ruta Nacional 38 bordeando las sierras en todo su esplendor.
+          </p>
+          <div class="atr-highlights">
+            <div class="atr-highlight">Villa Carlos Paz a 70 km del aeropuerto</div>
+            <div class="atr-highlight">Río Cosquín y cascadas accesibles en auto</div>
+            <div class="atr-highlight">Ruta 38 — una de las más bellas del país</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
