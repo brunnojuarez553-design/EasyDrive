@@ -190,15 +190,20 @@
     .hero-bg {
       position: absolute; inset: 0;
       overflow: hidden;
+      background: #0d0b08; /* fondo oscuro mientras el video carga */
     }
-    /* Fallback si el video no carga */
+    /* Fallback solo si el video falla — muy difuminada para no distraer */
     .hero-bg::before {
       content: '';
       position: absolute; inset: 0;
-      background-image: url('https://res.cloudinary.com/dvvuwigmy/image/upload/v1779502851/ChatGPT_Image_22_may_2026_04_14_19_p.m._bafls6.png');
+      background-image: url('https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_800/v1779502851/ChatGPT_Image_22_may_2026_04_14_19_p.m._bafls6.png');
       background-size: cover; background-position: center;
       z-index: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
     }
+    /* Clase que se activa solo si el video falla */
+    .hero-bg.video-failed::before { opacity: 0.35; }
     .hero-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(110deg, rgba(8,8,8,.92) 0%, rgba(8,8,8,.65) 55%, rgba(8,8,8,.2) 100%);
@@ -1007,7 +1012,7 @@
   </div>
 
   <!-- FLOATING WHATSAPP -->
-  <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+consultar+disponibilidad+de+autos+en+C%C3%B3rdoba" class="wa-float" target="_blank" rel="noopener" title="WhatsApp">
+  <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+consultar+disponibilidad+de+autos+en+C%C3%B3rdoba" class="wa-float" target="_blank" rel="noopener" title="WhatsApp">
     <span class="wa-float-label">Reservar por WhatsApp</span>
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   </a>
@@ -1111,7 +1116,6 @@
         disablepictureinpicture
         preload="auto"
         fetchpriority="high"
-        poster="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_800/v1779502851/ChatGPT_Image_22_may_2026_04_14_19_p.m._bafls6.png"
         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;pointer-events:none;z-index:1;"
       >
         <!-- Mobile: alta calidad para pantallas retina, ancho suficiente para cover sin pixelarse -->
@@ -1132,13 +1136,13 @@
           type="video/mp4"
         />
       </video>
-      <!-- Script inline — dispara play() lo antes posible sin esperar ningún evento tardío.
-           En iOS Safari el autoplay solo funciona si muted+playsinline están seteados ANTES de play(). -->
+      <!-- El fondo oscuro se muestra mientras carga. La imagen de fallback SOLO aparece si el video falla. -->
       <script>
         (function(){
           var v = document.getElementById('heroBgVideo');
-          if(!v) return;
-          // Forzar muted antes del play — crítico para iOS Safari
+          var bg = v ? v.closest('.hero-bg') : null;
+          if(!v || !bg) return;
+
           v.muted = true;
           v.defaultMuted = true;
           v.setAttribute('muted', '');
@@ -1147,29 +1151,33 @@
           function tryPlay(){
             var p = v.play();
             if(p && p.catch) p.catch(function(){
-              // Autoplay bloqueado (ej: Low Power Mode iOS) — el poster se mantiene, no pasa nada
+              // Autoplay bloqueado — mostrar fallback difuminado
+              bg.classList.add('video-failed');
             });
           }
 
-          // Si ya tiene datos suficientes, reproducir ya
           if(v.readyState >= 2){
             tryPlay();
           } else {
-            // canplaythrough = tiene suficientes datos para reproducir sin interrupciones
             v.addEventListener('canplaythrough', tryPlay, {once:true, passive:true});
-            // loadeddata = primeros frames disponibles — fallback más rápido
             v.addEventListener('loadeddata', tryPlay, {once:true, passive:true});
           }
 
-          // En iOS, a veces hay que llamar load() explícitamente para disparar la descarga
+          // Error de red o formato no soportado — mostrar fallback
+          v.addEventListener('error', function(){
+            bg.classList.add('video-failed');
+          }, {once:true});
+
           if(/iPhone|iPad|iPod/.test(navigator.userAgent)) {
             v.load();
           }
 
-          // Seguridad: si en 6s no cargó nada, mostrar solo el poster
+          // Si en 8s no cargó nada, activar fallback
           setTimeout(function(){
-            if(v.readyState < 1) v.style.opacity = '0';
-          }, 6000);
+            if(v.readyState < 1){
+              bg.classList.add('video-failed');
+            }
+          }, 8000);
         })();
       </script>
     </div>
@@ -1189,7 +1197,7 @@
       </div>
       <div class="hero-actions">
         <button class="btn-primary" onclick="abrirBuscador()">Verificar disponibilidad</button>
-        <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+consultar+disponibilidad+de+autos+en+C%C3%B3rdoba" class="btn-wa" target="_blank" rel="noopener">
+        <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+consultar+disponibilidad+de+autos+en+C%C3%B3rdoba" class="btn-wa" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Consultar ahora
         </a>
@@ -1298,7 +1306,7 @@
           </div>
           <div class="car-footer">
             <div class="car-price">Consultar <span>/ día</span></div>
-            <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+reservar+la+RAM+Dakota+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
+            <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+reservar+la+RAM+Dakota+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
           </div>
         </div>
       </div>
@@ -1308,11 +1316,10 @@
         <div class="car-gallery" id="gallery-hilux">
           <div class="car-gallery-track" id="track-hilux">
             <img
-              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,h_480,c_fill,g_center,y_20/v1779488578/hilux-super-blanco_zeaabj.png"
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/hilux-super-blanco_zeaabj.png"
               alt="Toyota Hilux 2026"
               loading="eager"
               class="pos-center"
-              style="object-position: 35% 60%;"
             />
             <img
               src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488577/HD-wallpaper-toyota-hilux-interior-pickup-cars-vehicle_aojhra.jpg"
@@ -1343,7 +1350,7 @@
           </div>
           <div class="car-footer">
             <div class="car-price">Consultar <span>/ día</span></div>
-            <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+reservar+la+Toyota+Hilux+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
+            <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+reservar+la+Toyota+Hilux+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
           </div>
         </div>
       </div>
@@ -1353,11 +1360,10 @@
         <div class="car-gallery" id="gallery-208">
           <div class="car-gallery-track" id="track-208">
             <img
-              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,h_480,c_fill,g_center/v1779488578/imagen_1905_vdx2la.png"
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/imagen_1905_vdx2la.png"
               alt="Peugeot 208 2026"
               loading="eager"
               class="pos-center"
-              style="object-position: 35% 55%;"
             />
             <img
               src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488576/nuevo-peugeot-208-2025-argentina-8.jpg_kiytv4.webp"
@@ -1388,7 +1394,7 @@
           </div>
           <div class="car-footer">
             <div class="car-price">Consultar <span>/ día</span></div>
-            <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+reservar+el+Peugeot+208+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
+            <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+reservar+el+Peugeot+208+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
           </div>
         </div>
       </div>
@@ -1432,7 +1438,7 @@
           </div>
           <div class="car-footer">
             <div class="car-price">Consultar <span>/ día</span></div>
-            <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+reservar+el+Chevrolet+Tracker+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
+            <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+reservar+el+Chevrolet+Tracker+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
           </div>
         </div>
       </div>
@@ -1476,7 +1482,7 @@
           </div>
           <div class="car-footer">
             <div class="car-price">Consultar <span>/ día</span></div>
-            <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+reservar+el+Peugeot+2008+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
+            <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+reservar+el+Peugeot+2008+2026+en+C%C3%B3rdoba" class="btn-reservar" target="_blank" rel="noopener">Reservar</a>
           </div>
         </div>
       </div>
@@ -1514,7 +1520,7 @@
       </div>
     </div>
     <div class="section-cta-center reveal">
-      <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+iniciar+mi+reserva+de+auto+en+C%C3%B3rdoba" class="btn-wa" target="_blank" rel="noopener" style="display:inline-flex; margin-top:0;">
+      <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+iniciar+mi+reserva+de+auto+en+C%C3%B3rdoba" class="btn-wa" target="_blank" rel="noopener" style="display:inline-flex; margin-top:0;">
         <svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Iniciar reserva ahora
       </a>
@@ -1663,7 +1669,7 @@
             <span class="contact-icon">📱</span>
             <div class="contact-text">
               <strong>WhatsApp</strong>
-              +54 9 351 000-0000
+              +54 9 3512645858
             </div>
           </div>
           <div class="contact-item">
@@ -1718,7 +1724,7 @@
           </div>
           <button class="form-submit" onclick="enviarReserva()">Enviar solicitud de reserva →</button>
         </div>
-        <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+reservar+un+auto+en+C%C3%B3rdoba" class="form-wa-alt" target="_blank" rel="noopener">
+        <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+reservar+un+auto+en+C%C3%B3rdoba" class="form-wa-alt" target="_blank" rel="noopener">
           <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           O reservá directamente por WhatsApp
         </a>
@@ -1833,7 +1839,7 @@
       <p>Córdoba, las Sierras Chicas, el Valle de Punilla, la Ruta Nacional 38 y los ríos del interior. Todo al volante de un auto 0km.</p>
       <div class="final-cta-btns">
         <a href="#reserva" class="btn-primary-lg">Reservar ahora</a>
-        <a href="https://wa.me/5493516458580?text=Hola%2C+quiero+reservar+un+auto+en+C%C3%B3rdoba" class="btn-wa-lg" target="_blank" rel="noopener">
+        <a href="https://wa.me/5493512645858?text=Hola%2C+quiero+reservar+un+auto+en+C%C3%B3rdoba" class="btn-wa-lg" target="_blank" rel="noopener">
           <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Hablar por WhatsApp
         </a>
@@ -1849,7 +1855,7 @@
         <p>Rent a Car premium en Córdoba, Argentina. Flota 0km 2026, entrega en aeropuerto y atención 24/7 para que tu experiencia en el corazón del país sea extraordinaria.</p>
         <div class="footer-socials">
           <a class="social-btn" href="https://www.instagram.com/rent.a.car.easydrive" target="_blank" rel="noopener" title="Instagram">ig</a>
-          <a class="social-btn" href="https://wa.me/5493516458580" target="_blank" rel="noopener" title="WhatsApp">wa</a>
+          <a class="social-btn" href="https://wa.me/5493512645858" target="_blank" rel="noopener" title="WhatsApp">wa</a>
           <a class="social-btn" href="#" title="Facebook">fb</a>
         </div>
       </div>
@@ -1878,7 +1884,7 @@
         <ul>
           <li><a href="#">✈️ Aeropuerto Internacional Ambrosio Taravella</a></li>
           <li><a href="#">📍 Centro de Córdoba</a></li>
-          <li><a href="https://wa.me/5493516458580" target="_blank" rel="noopener">📱 +54 9 351 000-0000</a></li>
+          <li><a href="https://wa.me/5493512645858" target="_blank" rel="noopener">📱 +54 9 3512645858</a></li>
           <li><a href="#">✉️ info@easydrive.com.ar</a></li>
           <li><a href="#">🕐 Atención 24/7</a></li>
         </ul>
@@ -1999,7 +2005,7 @@
       const horaD     = document.getElementById('sb-hora-desde').value;
       const horaH     = document.getElementById('sb-hora-hasta').value;
       const vehiculo  = document.getElementById('sb-vehiculo').value;
-      const WA_NUMBER = '5493516458580';
+      const WA_NUMBER = '5493512645858';
 
       const texto = `Hola! Consulta de disponibilidad desde Easy Drive Córdoba 🚗
 
@@ -2030,7 +2036,7 @@ _Consulta generada desde easydrive.com.ar_`;
         return;
       }
 
-      const WA_NUMBER = '5493516458580';
+      const WA_NUMBER = '5493512645858';
       const vehiculosMap = {
         'ram-dakota':    'RAM Dakota 2026',
         'toyota-hilux':  'Toyota Hilux 2026',
@@ -2066,7 +2072,7 @@ _Solicitud generada desde easydrive.com.ar_`;
     // ── FAQ ────────────────────────────────────────────
     function openFAQ(e) {
       e.preventDefault();
-      const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Preguntas frecuentes — Easy Drive Córdoba</title><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/><style>:root{--gold:#b8873a;--black:#1a1610;--card:#f9f6f2;--muted:#7a7060;--border:#e2dbd2;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Outfit',sans-serif;}*{box-sizing:border-box;margin:0;padding:0;}body{background:#ffffff;color:var(--black);font-family:var(--sans);font-weight:300;line-height:1.7;}.page{max-width:800px;margin:0 auto;padding:4rem 2rem 6rem;position:relative;}.logo{display:flex;align-items:center;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border);}.logo img{height:44px;}.eyebrow{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}.eyebrow::before{content:'';display:block;width:30px;height:1px;background:var(--gold);}.eyebrow span{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);}h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,4rem);font-weight:300;line-height:1.1;margin-bottom:2.5rem;}h1 em{font-style:italic;color:var(--gold);}.faq-list{display:flex;flex-direction:column;gap:1px;background:var(--border);margin-bottom:4rem;}.faq-item{background:var(--card);overflow:hidden;}.faq-q{width:100%;background:none;border:none;color:var(--black);font-family:var(--sans);font-size:.92rem;font-weight:400;padding:1.5rem 2rem;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:color .3s;}.faq-q:hover{color:var(--gold);}.faq-icon{color:var(--gold);font-size:1.2rem;flex-shrink:0;transition:transform .35s;font-style:normal;}.faq-item.open .faq-icon{transform:rotate(45deg);}.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;font-size:.88rem;color:var(--muted);line-height:1.9;padding:0 2rem;}.faq-item.open .faq-a{max-height:300px;padding:0 2rem 1.5rem;}.cta-box{background:var(--card);border:1px solid var(--border);padding:2.5rem;text-align:center;}.cta-box h3{font-family:var(--serif);font-size:1.6rem;font-weight:300;margin-bottom:.8rem;color:var(--black);}.cta-box p{font-size:.85rem;color:var(--muted);margin-bottom:1.8rem;}.cta-btn{display:inline-block;background:#25d366;color:#fff;font-family:var(--sans);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding:.9rem 2.2rem;text-decoration:none;font-weight:500;}.back{display:inline-flex;align-items:center;gap:.5rem;color:var(--gold);text-decoration:none;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;margin-top:3rem;border:1px solid var(--gold);padding:.7rem 1.5rem;transition:background .3s,color .3s;}.back:hover{background:var(--gold);color:#fff;}.bg-overlay{position:fixed;inset:0;background-image:url('https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_1200/v1779513034/ChatGPT_Image_23_may_2026_02_08_57_ajx8wt.png');background-size:cover;background-position:center;opacity:.08;pointer-events:none;z-index:-1;}</style></head><body><div class="page"><div class="logo"><img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779492200/IMG_6850_ospah5.png" alt="Easy Drive"/></div><div class="eyebrow"><span>Todo lo que necesitás saber</span></div><h1>Preguntas<br><em>frecuentes</em></h1><div class="faq-list" id="faqList"><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Dónde puedo retirar el auto en Córdoba?<span class="faq-icon">+</span></button><div class="faq-a">Entregamos directamente en el Aeropuerto Internacional Ambrosio Taravella de Córdoba, o en el centro de la ciudad. Solo avisanos tu horario de llegada y te esperamos.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Qué necesito para alquilar?<span class="faq-icon">+</span></button><div class="faq-a">DNI vigente, licencia de conducir habilitada (mínimo 2 años de antigüedad) y método de pago. ¡Eso es todo! El proceso es simple y lo resolvemos por WhatsApp.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Los autos son aptos para las rutas y sierras de Córdoba?<span class="faq-icon">+</span></button><div class="faq-a">Sí. Nuestra flota incluye pickups 4x4 y SUVs preparados para los caminos de las sierras y el interior cordobés. Para rutas off-road recomendamos la RAM Dakota o la Toyota Hilux.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿El seguro está incluido?<span class="faq-icon">+</span></button><div class="faq-a">Sí. Todos los alquileres incluyen seguro contra terceros. También ofrecemos cobertura total (full coverage) como opción adicional. Te informamos el costo al confirmar.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Cuánto tiempo antes debo reservar?<span class="faq-icon">+</span></button><div class="faq-a">Recomendamos reservar con al menos 24–48 horas de anticipación. En temporada alta (verano y Semana Santa) lo antes posible, ya que la disponibilidad es limitada.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Cuáles son los métodos de pago?<span class="faq-icon">+</span></button><div class="faq-a">Aceptamos efectivo (pesos argentinos) y transferencia bancaria. El pago se realiza al confirmar la reserva o al momento del retiro, según lo acordado.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Puedo recorrer toda la provincia de Córdoba?<span class="faq-icon">+</span></button><div class="faq-a">Sí, podés circular por toda la provincia. Recomendamos avisarnos si planeás salir del área metropolitana de Córdoba para asegurarnos de que la cobertura sea la adecuada para todos los caminos.</div></div></div><div class="cta-box"><h3>¿Quedó alguna duda?</h3><p>Escribinos por WhatsApp y te respondemos en minutos.</p><a href="https://wa.me/5493516458580?text=Hola%2C+tengo+una+consulta+sobre+alquiler+de+autos+en+C%C3%B3rdoba" class="cta-btn" target="_blank">Consultar por WhatsApp</a></div><a href="javascript:window.close()" class="back">← Volver a Easy Drive</a></div><script>function toggleFaq(btn){const item=btn.closest('.faq-item');const isOpen=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));if(!isOpen)item.classList.add('open');}<\/script><div class=\"bg-overlay\"></div></body></html>`;
+      const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Preguntas frecuentes — Easy Drive Córdoba</title><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/><style>:root{--gold:#b8873a;--black:#1a1610;--card:#f9f6f2;--muted:#7a7060;--border:#e2dbd2;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Outfit',sans-serif;}*{box-sizing:border-box;margin:0;padding:0;}body{background:#ffffff;color:var(--black);font-family:var(--sans);font-weight:300;line-height:1.7;}.page{max-width:800px;margin:0 auto;padding:4rem 2rem 6rem;position:relative;}.logo{display:flex;align-items:center;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border);}.logo img{height:44px;}.eyebrow{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}.eyebrow::before{content:'';display:block;width:30px;height:1px;background:var(--gold);}.eyebrow span{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);}h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,4rem);font-weight:300;line-height:1.1;margin-bottom:2.5rem;}h1 em{font-style:italic;color:var(--gold);}.faq-list{display:flex;flex-direction:column;gap:1px;background:var(--border);margin-bottom:4rem;}.faq-item{background:var(--card);overflow:hidden;}.faq-q{width:100%;background:none;border:none;color:var(--black);font-family:var(--sans);font-size:.92rem;font-weight:400;padding:1.5rem 2rem;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:color .3s;}.faq-q:hover{color:var(--gold);}.faq-icon{color:var(--gold);font-size:1.2rem;flex-shrink:0;transition:transform .35s;font-style:normal;}.faq-item.open .faq-icon{transform:rotate(45deg);}.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;font-size:.88rem;color:var(--muted);line-height:1.9;padding:0 2rem;}.faq-item.open .faq-a{max-height:300px;padding:0 2rem 1.5rem;}.cta-box{background:var(--card);border:1px solid var(--border);padding:2.5rem;text-align:center;}.cta-box h3{font-family:var(--serif);font-size:1.6rem;font-weight:300;margin-bottom:.8rem;color:var(--black);}.cta-box p{font-size:.85rem;color:var(--muted);margin-bottom:1.8rem;}.cta-btn{display:inline-block;background:#25d366;color:#fff;font-family:var(--sans);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding:.9rem 2.2rem;text-decoration:none;font-weight:500;}.back{display:inline-flex;align-items:center;gap:.5rem;color:var(--gold);text-decoration:none;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;margin-top:3rem;border:1px solid var(--gold);padding:.7rem 1.5rem;transition:background .3s,color .3s;}.back:hover{background:var(--gold);color:#fff;}.bg-overlay{position:fixed;inset:0;background-image:url('https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_1200/v1779513034/ChatGPT_Image_23_may_2026_02_08_57_ajx8wt.png');background-size:cover;background-position:center;opacity:.08;pointer-events:none;z-index:-1;}</style></head><body><div class="page"><div class="logo"><img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779492200/IMG_6850_ospah5.png" alt="Easy Drive"/></div><div class="eyebrow"><span>Todo lo que necesitás saber</span></div><h1>Preguntas<br><em>frecuentes</em></h1><div class="faq-list" id="faqList"><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Dónde puedo retirar el auto en Córdoba?<span class="faq-icon">+</span></button><div class="faq-a">Entregamos directamente en el Aeropuerto Internacional Ambrosio Taravella de Córdoba, o en el centro de la ciudad. Solo avisanos tu horario de llegada y te esperamos.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Qué necesito para alquilar?<span class="faq-icon">+</span></button><div class="faq-a">DNI vigente, licencia de conducir habilitada (mínimo 2 años de antigüedad) y método de pago. ¡Eso es todo! El proceso es simple y lo resolvemos por WhatsApp.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Los autos son aptos para las rutas y sierras de Córdoba?<span class="faq-icon">+</span></button><div class="faq-a">Sí. Nuestra flota incluye pickups 4x4 y SUVs preparados para los caminos de las sierras y el interior cordobés. Para rutas off-road recomendamos la RAM Dakota o la Toyota Hilux.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿El seguro está incluido?<span class="faq-icon">+</span></button><div class="faq-a">Sí. Todos los alquileres incluyen seguro contra terceros. También ofrecemos cobertura total (full coverage) como opción adicional. Te informamos el costo al confirmar.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Cuánto tiempo antes debo reservar?<span class="faq-icon">+</span></button><div class="faq-a">Recomendamos reservar con al menos 24–48 horas de anticipación. En temporada alta (verano y Semana Santa) lo antes posible, ya que la disponibilidad es limitada.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Cuáles son los métodos de pago?<span class="faq-icon">+</span></button><div class="faq-a">Aceptamos efectivo (pesos argentinos) y transferencia bancaria. El pago se realiza al confirmar la reserva o al momento del retiro, según lo acordado.</div></div><div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Puedo recorrer toda la provincia de Córdoba?<span class="faq-icon">+</span></button><div class="faq-a">Sí, podés circular por toda la provincia. Recomendamos avisarnos si planeás salir del área metropolitana de Córdoba para asegurarnos de que la cobertura sea la adecuada para todos los caminos.</div></div></div><div class="cta-box"><h3>¿Quedó alguna duda?</h3><p>Escribinos por WhatsApp y te respondemos en minutos.</p><a href="https://wa.me/5493512645858?text=Hola%2C+tengo+una+consulta+sobre+alquiler+de+autos+en+C%C3%B3rdoba" class="cta-btn" target="_blank">Consultar por WhatsApp</a></div><a href="javascript:window.close()" class="back">← Volver a Easy Drive</a></div><script>function toggleFaq(btn){const item=btn.closest('.faq-item');const isOpen=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));if(!isOpen)item.classList.add('open');}<\/script><div class=\"bg-overlay\"></div></body></html>`;
       const w = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
       w.document.write(html);
       w.document.close();
