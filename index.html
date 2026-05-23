@@ -17,14 +17,14 @@
   <style>
     /* ─── VARIABLES ─────────────────────────────── */
     :root {
-      --black:  #080808;
-      --dark:   #0f0f0f;
-      --card:   #141414;
-      --border: #1e1e1e;
-      --gold:   #c9a96e;
-      --gold2:  #e8ccA0;
-      --cream:  #f5f0eb;
-      --muted:  #6a6a6a;
+      --black:  #1a1610;
+      --dark:   #ffffff;
+      --card:   #f9f6f2;
+      --border: #e2dbd2;
+      --gold:   #b8873a;
+      --gold2:  #d4a45a;
+      --cream:  #1a1610;
+      --muted:  #7a7060;
       --white:  #ffffff;
       --green:  #25d366;
       --serif:  'Cormorant Garamond', Georgia, serif;
@@ -37,8 +37,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      background: var(--black);
-      color: var(--cream);
+      background: #ffffff;
+      color: var(--black);
       font-family: var(--sans);
       font-weight: 300;
       line-height: 1.6;
@@ -65,13 +65,13 @@
     body:has(button:hover) .cursor { width: 20px; height: 20px; }
 
     ::-webkit-scrollbar { width: 3px; }
-    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-track { background: #f0ebe4; }
     ::-webkit-scrollbar-thumb { background: var(--gold); }
 
     /* ─── URGENCY BAR ───────────────────────────── */
     .urgency-bar {
       background: var(--gold);
-      color: var(--black);
+      color: #ffffff;
       text-align: center;
       padding: .55rem 1rem;
       font-size: .72rem;
@@ -91,24 +91,25 @@
       transition: background .5s, padding .4s, backdrop-filter .5s;
     }
     nav.scrolled {
-      background: rgba(8,8,8,.9);
+      background: rgba(255,255,255,.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 20px rgba(0,0,0,.08);
       padding: .9rem 4rem;
     }
     .nav-logo img { height: 46px; width: auto; object-fit: contain; }
     .nav-links { display: none !important; }
     .nav-cta {
       display: none !important;
-      background: var(--gold); color: var(--black);
+      background: var(--gold); color: #ffffff;
       font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
       font-weight: 500; padding: .6rem 1.4rem;
       text-decoration: none; transition: background .3s;
     }
     .nav-cta:hover { background: var(--gold2); }
     .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: none; background: none; border: none; padding: 4px; }
-    .hamburger span { width: 24px; height: 1px; background: var(--cream); display: block; transition: var(--transition); }
+    .hamburger span { width: 24px; height: 1px; background: var(--black); display: block; transition: var(--transition); }
     .hamburger.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
     .hamburger.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
@@ -126,7 +127,7 @@
       position: fixed; top: 0; right: 0;
       width: min(380px, 85vw);
       height: 100vh; z-index: 150;
-      background: var(--dark);
+      background: #ffffff;
       border-left: 1px solid var(--border);
       transform: translateX(100%);
       transition: transform .45s var(--ease);
@@ -141,7 +142,7 @@
     }
     .mobile-close {
       background: none; border: 1px solid var(--border);
-      color: var(--cream); width: 36px; height: 36px;
+      color: var(--black); width: 36px; height: 36px;
       cursor: pointer; font-size: .9rem;
       display: flex; align-items: center; justify-content: center;
       transition: border-color .3s, color .3s;
@@ -152,7 +153,7 @@
       font-family: var(--serif) !important;
       font-size: 1.5rem !important;
       font-weight: 300 !important;
-      color: var(--cream) !important;
+      color: var(--black) !important;
       text-decoration: none !important;
       padding: 1rem 1.4rem !important;
       border-bottom: 1px solid var(--border) !important;
@@ -247,7 +248,7 @@
       opacity: 0; animation: fadeUp .8s .9s forwards;
     }
     .btn-primary {
-      background: var(--gold); color: var(--black);
+      background: var(--gold); color: #ffffff;
       font-family: var(--sans); font-size: .8rem;
       letter-spacing: .2em; text-transform: uppercase;
       padding: 1.1rem 2.8rem;
@@ -283,7 +284,7 @@
     }
     .trust-item {
       display: flex; align-items: center; gap: .5rem;
-      font-size: .7rem; letter-spacing: .08em; color: rgba(245,240,235,.5);
+      font-size: .7rem; letter-spacing: .08em; color: rgba(255,255,255,.6);
     }
     .trust-item::before { content: '✓'; color: var(--gold); font-weight: 600; }
     .hero-stats {
@@ -293,7 +294,7 @@
     }
     .stat { text-align: right; }
     .stat-number { font-family: var(--serif); font-size: 2.5rem; font-weight: 300; color: var(--gold); line-height: 1; }
-    .stat-label { font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-top: .2rem; }
+    .stat-label { font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(245,240,235,.6); margin-top: .2rem; }
     .hero-scroll {
       position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
       display: flex; flex-direction: column; align-items: center; gap: .5rem;
@@ -312,7 +313,7 @@
 
     /* ─── SOCIAL PROOF BAR ───────────────────────── */
     .proof-bar {
-      background: var(--dark);
+      background: #f9f6f2;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       padding: 1.8rem 4rem;
@@ -322,7 +323,7 @@
     }
     .proof-item {
       display: flex; align-items: center; gap: 1rem;
-      font-size: .8rem; color: rgba(245,240,235,.6);
+      font-size: .8rem; color: #4a4030;
       white-space: nowrap;
     }
     .proof-item strong { color: var(--gold); font-weight: 500; font-family: var(--serif); font-size: 1.3rem; }
@@ -331,18 +332,18 @@
     /* ─── SECTION COMMONS ───────────────────────── */
     section { padding: 7rem 4rem; }
     .section-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
-    .section-eyebrow::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
+    .section-eyebrow::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); opacity: .7; }
     .section-eyebrow span { font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
     .section-title {
       font-family: var(--serif);
       font-size: clamp(2.2rem, 5vw, 3.8rem);
-      font-weight: 300; line-height: 1.1; color: var(--cream);
+      font-weight: 300; line-height: 1.1; color: var(--black);
     }
     .section-title em { font-style: italic; color: var(--gold); }
 
     /* ─── BENEFICIOS (reemplaza diferenciadores) ─── */
     #diferenciadores {
-      background: var(--dark);
+      background: #f9f6f2;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       position: relative; overflow: hidden;
@@ -367,17 +368,17 @@
     .dif-item:last-child { border-right: none; }
     .dif-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--gold); transition: width .5s ease; }
     .dif-item:hover::after { width: 100%; }
-    .dif-item:hover { background: rgba(201,169,110,.03); }
+    .dif-item:hover { background: rgba(184,135,58,.06); }
     .dif-icon { font-size: 1.8rem; margin-bottom: 1.5rem; display: block; }
-    .dif-item h3 { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: var(--cream); margin-bottom: .8rem; }
-    .dif-item p { font-size: .85rem; color: var(--muted); line-height: 1.7; }
+    .dif-item h3 { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: var(--black); margin-bottom: .8rem; }
+    .dif-item p { font-size: .85rem; color: #5a5040; line-height: 1.7; }
     /* CTA after diferenciadores */
     .section-cta-center {
       text-align: center; margin-top: 4rem;
     }
 
     /* ─── FLOTA ─────────────────────────────────── */
-    #flota { background: var(--black); }
+    #flota { background: #ffffff; }
     .flota-header {
       display: flex; justify-content: space-between; align-items: flex-end;
       margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem;
@@ -391,8 +392,8 @@
       transition: all .3s; margin-left: -1px;
     }
     .filter-btn.active, .filter-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); z-index: 1; position: relative; }
-    .flota-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; background: var(--border); }
-    .car-card { background: var(--card); overflow: hidden; position: relative; cursor: none; transition: transform var(--transition); }
+    .flota-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; background: transparent; }
+    .car-card { background: #ffffff; border: 1px solid var(--border); overflow: hidden; position: relative; cursor: none; transition: transform var(--transition); }
     .car-card:hover { transform: translateY(-5px); z-index: 2; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
     .car-gallery { position: relative; overflow: hidden; height: 240px; }
     .car-gallery-track { display: flex; height: 100%; transition: transform .5s var(--ease); }
@@ -408,20 +409,20 @@
     .car-year { position: absolute; top: 1rem; right: 1rem; font-family: var(--serif); font-size: 1rem; color: rgba(245,240,235,.8); background: rgba(8,8,8,.7); padding: .2rem .6rem; z-index: 4; }
     .car-avail { position: absolute; bottom: .8rem; left: .8rem; background: rgba(37,211,102,.15); border: 1px solid rgba(37,211,102,.4); color: #4ade80; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; padding: .2rem .7rem; z-index: 4; display: flex; align-items: center; gap: .35rem; }
     .car-avail::before { content: ''; width: 5px; height: 5px; background: #4ade80; border-radius: 50%; }
-    .car-card-body { padding: 1.8rem 2rem; }
+    .car-card-body { padding: 1.8rem 2rem; background: #ffffff; }
     .car-brand { font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; color: var(--gold); margin-bottom: .4rem; }
-    .car-name { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--cream); margin-bottom: .3rem; }
-    .car-category { font-size: .75rem; color: var(--muted); letter-spacing: .1em; margin-bottom: 1.5rem; }
+    .car-name { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--black); margin-bottom: .3rem; }
+    .car-category { font-size: .75rem; color: #7a7060; letter-spacing: .1em; margin-bottom: 1.5rem; }
     .car-features { display: flex; gap: 1.2rem; margin-bottom: 1.8rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
     .car-feat { display: flex; flex-direction: column; align-items: center; gap: .3rem; }
     .car-feat-icon { font-size: 1rem; }
-    .car-feat-label { font-size: .6rem; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+    .car-feat-label { font-size: .6rem; letter-spacing: .1em; color: #7a7060; text-transform: uppercase; }
     .car-footer { display: flex; justify-content: space-between; align-items: center; }
-    .car-price { font-family: var(--serif); font-size: 1.2rem; color: var(--cream); }
+    .car-price { font-family: var(--serif); font-size: 1.2rem; color: var(--black); }
     .car-price span { font-size: .75rem; color: var(--muted); margin-left: .3rem; }
     .btn-reservar {
       background: var(--gold); border: none;
-      color: var(--black); font-family: var(--sans);
+      color: #ffffff; font-family: var(--sans);
       font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
       padding: .65rem 1.4rem; cursor: none;
       transition: background var(--transition), transform .2s;
@@ -431,21 +432,21 @@
 
     /* ─── MID-PAGE WA CTA ────────────────────────── */
     .mid-cta {
-      background: linear-gradient(135deg, var(--dark) 0%, #0d0d08 100%);
+      background: linear-gradient(135deg, #f4efe8 0%, #ede7dd 100%);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       padding: 5rem 4rem;
       text-align: center;
     }
     .mid-cta-inner { max-width: 640px; margin: 0 auto; }
-    .mid-cta h2 { font-family: var(--serif); font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 300; margin-bottom: 1rem; }
+    .mid-cta h2 { font-family: var(--serif); font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 300; margin-bottom: 1rem; color: var(--black); }
     .mid-cta h2 em { font-style: italic; color: var(--gold); }
-    .mid-cta p { font-size: .9rem; color: var(--muted); margin-bottom: 2.5rem; line-height: 1.8; }
+    .mid-cta p { font-size: .9rem; color: #4a4030; margin-bottom: 2.5rem; line-height: 1.8; }
     .mid-cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
     /* ─── COMO FUNCIONA ─────────────────────────── */
     #como-funciona {
-      background: var(--dark);
+      background: #f9f6f2;
       border-top: 1px solid var(--border);
       position: relative;
       overflow: hidden;
@@ -470,13 +471,13 @@
     .pasos::before { content: ''; position: absolute; top: 50%; left: calc(33.33% + 1px); right: calc(33.33% + 1px); height: 1px; background: var(--gold); opacity: .3; transform: translateY(-50%); }
     .paso { padding: 4rem 3rem; border-right: 1px solid var(--border); position: relative; text-align: center; }
     .paso:last-child { border-right: none; }
-    .paso-num { font-family: var(--serif); font-size: 5rem; font-weight: 300; color: rgba(201,169,110,.1); line-height: 1; position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); }
+    .paso-num { font-family: var(--serif); font-size: 5rem; font-weight: 300; color: rgba(184,135,58,.15); line-height: 1; position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); }
     .paso-icon { font-size: 2rem; margin-bottom: 1.5rem; position: relative; z-index: 1; }
-    .paso h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; color: var(--cream); margin-bottom: .8rem; position: relative; z-index: 1; }
-    .paso p { font-size: .85rem; color: var(--muted); line-height: 1.8; position: relative; z-index: 1; }
+    .paso h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; color: var(--black); margin-bottom: .8rem; position: relative; z-index: 1; }
+    .paso p { font-size: .85rem; color: #5a5040; line-height: 1.8; position: relative; z-index: 1; }
 
     /* ─── TESTIMONIOS ───────────────────────────── */
-    #testimonios { background: var(--black); }
+    #testimonios { background: #f9f6f2; } background: #ffffff; background: var(--black); }
     .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; margin-top: 4rem; background: var(--border); }
     .testi-card { background: var(--card); padding: 3rem; position: relative; transition: transform var(--transition); }
     .testi-card:hover { transform: translateY(-4px); z-index: 2; }
@@ -486,14 +487,15 @@
     .testi-author { display: flex; align-items: center; gap: 1rem; }
     .testi-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--border); overflow: hidden; flex-shrink: 0; }
     .testi-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .testi-name { font-size: .85rem; color: var(--cream); font-weight: 500; }
+    .testi-name { font-size: .85rem; color: var(--black); font-weight: 600; }
     .testi-role { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
     .testi-stars { color: var(--gold); font-size: .8rem; margin-top: .3rem; letter-spacing: .05em; }
 
     /* ─── TRUST BADGES ──────────────────────────── */
     .trust-section {
-      background: var(--dark);
+      background: #f4efe8;
       border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       padding: 4rem;
     }
     .trust-grid {
@@ -509,19 +511,19 @@
     }
     .trust-badge:hover { border-color: var(--gold); }
     .trust-badge-icon { font-size: 1.8rem; }
-    .trust-badge-label { font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
-    .trust-badge-val { font-family: var(--serif); font-size: 1.1rem; color: var(--cream); margin-top: .1rem; }
+    .trust-badge-label { font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: #7a7060; }
+    .trust-badge-val { font-family: var(--serif); font-size: 1.1rem; color: var(--black); margin-top: .1rem; }
 
     /* ─── FORMULARIO ────────────────────────────── */
-    #reserva { background: var(--dark); border-top: 1px solid var(--border); }
+    #reserva { background: #f9f6f2; border-top: 1px solid var(--border); }
     .reserva-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
     .reserva-info { padding-top: 1rem; }
-    .reserva-info p { font-size: .9rem; color: var(--muted); line-height: 1.9; margin-top: 1.5rem; margin-bottom: 2.5rem; }
+    .reserva-info p { font-size: .9rem; color: #5a5040; line-height: 1.9; margin-top: 1.5rem; margin-bottom: 2.5rem; }
     .contact-items { display: flex; flex-direction: column; gap: 1.2rem; }
     .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
     .contact-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
-    .contact-text { font-size: .85rem; color: rgba(245,240,235,.65); line-height: 1.6; }
-    .contact-text strong { color: var(--cream); font-weight: 400; display: block; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .2rem; }
+    .contact-text { font-size: .85rem; color: #5a5040; line-height: 1.6; }
+    .contact-text strong { color: var(--black); font-weight: 400; display: block; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .2rem; }
     /* Urgency in form */
     .form-urgency {
       display: flex; align-items: center; gap: .7rem;
@@ -530,21 +532,21 @@
       padding: .9rem 1.2rem; margin-bottom: 1.5rem;
       font-size: .78rem; color: var(--gold);
     }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
-    .form-group { background: var(--card); padding: 1.5rem; display: flex; flex-direction: column; gap: .5rem; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .form-group { background: #ffffff; padding: 1.5rem; display: flex; flex-direction: column; gap: .5rem; }
     .form-group.full { grid-column: 1 / -1; }
     .form-group label { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
     .form-group input, .form-group select, .form-group textarea {
       background: transparent; border: none; border-bottom: 1px solid var(--border);
-      color: var(--cream); font-family: var(--sans); font-size: .9rem; font-weight: 300;
+      color: var(--black); font-family: var(--sans); font-size: .9rem; font-weight: 300;
       padding: .5rem 0; outline: none; transition: border-color var(--transition); width: 100%;
     }
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-bottom-color: var(--gold); }
-    .form-group select option { background: var(--card); color: var(--cream); }
+    .form-group select option { background: #ffffff; color: var(--black); }
     .form-group textarea { resize: none; height: 80px; }
     .form-submit {
       grid-column: 1 / -1; background: var(--gold); border: none;
-      color: var(--black); font-family: var(--sans);
+      color: #ffffff; font-family: var(--sans);
       font-size: .8rem; letter-spacing: .25em; text-transform: uppercase;
       padding: 1.3rem; cursor: none; font-weight: 600;
       transition: background var(--transition), transform var(--transition);
@@ -563,7 +565,7 @@
 
     /* ─── FINAL CTA ──────────────────────────────── */
     .final-cta {
-      background: linear-gradient(135deg, #0d0c08 0%, var(--dark) 100%);
+      background: linear-gradient(135deg, #1a1610 0%, #2a2018 100%);
       border-top: 1px solid var(--border);
       padding: 8rem 4rem;
       text-align: center;
@@ -576,12 +578,12 @@
       pointer-events: none;
     }
     .final-cta-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
-    .final-cta h2 { font-family: var(--serif); font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 300; line-height: 1.05; margin-bottom: 1.5rem; }
+    .final-cta h2 { font-family: var(--serif); font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 300; line-height: 1.05; margin-bottom: 1.5rem; color: #f5f0eb; }
     .final-cta h2 em { font-style: italic; color: var(--gold); }
-    .final-cta p { font-size: 1rem; color: var(--muted); margin-bottom: 3rem; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.8; }
+    .final-cta p { font-size: 1rem; color: rgba(245,240,235,.65); margin-bottom: 3rem; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.8; }
     .final-cta-btns { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
     .btn-primary-lg {
-      background: var(--gold); color: var(--black);
+      background: var(--gold); color: #ffffff;
       font-family: var(--sans); font-size: .85rem;
       letter-spacing: .22em; text-transform: uppercase;
       padding: 1.3rem 3.5rem; font-weight: 600;
@@ -602,23 +604,23 @@
     .btn-wa-lg:hover { background: #1ebc58; transform: translateY(-3px); }
 
     /* ─── FOOTER ────────────────────────────────── */
-    footer { background: var(--black); border-top: 1px solid var(--border); padding: 4rem 4rem 2rem; }
+    footer { background: #1a1610; border-top: 1px solid #2a2018; padding: 4rem 4rem 2rem; }
     .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
     .footer-brand h2 { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--cream); margin-bottom: .3rem; }
     .footer-brand h2 span { color: var(--gold); }
-    .footer-brand p { font-size: .8rem; color: var(--muted); margin-top: 1rem; line-height: 1.8; max-width: 260px; }
+    .footer-brand p { font-size: .8rem; color: rgba(245,240,235,.5); margin-top: 1rem; line-height: 1.8; max-width: 260px; }
     .footer-socials { display: flex; gap: 1rem; margin-top: 1.5rem; }
-    .social-btn { width: 36px; height: 36px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); text-decoration: none; font-size: .9rem; transition: all var(--transition); }
+    .social-btn { width: 36px; height: 36px; border: 1px solid #2a2018; display: flex; align-items: center; justify-content: center; color: rgba(245,240,235,.5); text-decoration: none; font-size: .9rem; transition: all var(--transition); }
     .social-btn:hover { border-color: var(--gold); color: var(--gold); }
-    .footer-col h4 { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+    .footer-col h4 { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold2); margin-bottom: 1.5rem; }
     .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .8rem; }
-    .footer-col ul a { color: var(--muted); text-decoration: none; font-size: .82rem; transition: color var(--transition); }
-    .footer-col ul a:hover { color: var(--cream); }
+    .footer-col ul a { color: rgba(245,240,235,.5); text-decoration: none; font-size: .82rem; transition: color var(--transition); }
+    .footer-col ul a:hover { color: #f5f0eb; }
     .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; }
-    .footer-copy { font-size: .72rem; color: var(--muted); }
+    .footer-copy { font-size: .72rem; color: rgba(245,240,235,.4); }
     .footer-legal { display: flex; gap: 2rem; }
-    .footer-legal a { font-size: .72rem; color: var(--muted); text-decoration: none; transition: color var(--transition); }
-    .footer-legal a:hover { color: var(--gold); }
+    .footer-legal a { font-size: .72rem; color: rgba(245,240,235,.4); text-decoration: none; transition: color var(--transition); }
+    .footer-legal a:hover { color: var(--gold2); }
 
     /* ─── FLOATING WA BUTTON ─────────────────────── */
     .wa-float {
@@ -672,19 +674,19 @@
       transition: opacity .35s; backdrop-filter: blur(4px);
     }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
-    .modal-box { background: #0f0f0f; border: 1px solid #2a2a2a; width: 100%; max-width: 480px; margin: 1rem; transform: translateY(20px); transition: transform .35s; }
+    .modal-box { background: #ffffff; border: 1px solid var(--border); width: 100%; max-width: 480px; margin: 1rem; transform: translateY(20px); transition: transform .35s; }
     .modal-overlay.open .modal-box { transform: translateY(0); }
-    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid #1e1e1e; }
-    .modal-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 300; color: var(--cream); }
-    .modal-close { background: none; border: 1px solid #2a2a2a; color: var(--cream); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: .85rem; transition: border-color .3s, color .3s; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .modal-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 300; color: var(--black); }
+    .modal-close { background: none; border: 1px solid var(--border); color: var(--black); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: .85rem; transition: border-color .3s, color .3s; }
     .modal-close:hover { border-color: var(--gold); color: var(--gold); }
     .modal-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
     .modal-field { display: flex; flex-direction: column; gap: .3rem; }
     .modal-field label { font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
-    .modal-field input, .modal-field select { background: #141414; border: 1px solid #2a2a2a; color: var(--cream); font-family: var(--sans); font-size: .88rem; font-weight: 300; padding: .65rem .9rem; outline: none; width: 100%; transition: border-color .3s; }
+    .modal-field input, .modal-field select { background: #f9f6f2; border: 1px solid var(--border); color: var(--black); font-family: var(--sans); font-size: .88rem; font-weight: 300; padding: .65rem .9rem; outline: none; width: 100%; transition: border-color .3s; }
     .modal-field input:focus, .modal-field select:focus { border-color: var(--gold); }
-    .modal-field select option { background: #141414; }
-    .modal-field input::placeholder { color: var(--muted); }
+    .modal-field select option { background: #ffffff; color: var(--black); }
+    .modal-field input::placeholder { color: #aaa09a; }
     .modal-field input[type="date"]::-webkit-calendar-picker-indicator,
     .modal-field input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(.5); cursor: pointer; }
     .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -779,7 +781,7 @@
       .paso-num { font-size: 3.5rem; }
 
       /* ── Testimonios ── */
-      #testimonios { padding: 3.5rem 1.2rem; }
+      #testimonios { background: #f9f6f2; } background: #ffffff; padding: 3.5rem 1.2rem; }
       .testi-card { padding: 1.5rem; }
       .testi-text { font-size: .85rem; }
 
@@ -837,7 +839,7 @@
 
   <!-- URGENCY BAR -->
   <div class="urgency-bar">
-    ⚡ Temporada alta — disponibilidad limitada <span>·</span> Reservá hoy y confirmamos en minutos <span>·</span> Entrega en Aeropuerto Internacional Ambrosio Taravella
+    ⚡ Temporada alta — disponibilidad limitada <span>·</span> Reservá hoy y confirmamos en minutos <span>·</span> Promociones con tarjeta de crédito
   </div>
 
   <!-- FLOATING WHATSAPP -->
@@ -1056,12 +1058,14 @@
       <div class="car-card reveal reveal-delay-1" data-cat="pickup">
         <div class="car-gallery" id="gallery-hilux">
           <div class="car-gallery-track" id="track-hilux">
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488578/getImage_aqik1e.webp" alt="Toyota Hilux 2026" loading="lazy"/>
+            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488578/hilux-super-blanco_zeaabj.png" alt="Toyota Hilux 2026" loading="lazy"/>
+            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488577/HD-wallpaper-toyota-hilux-interior-pickup-cars-vehicle_aojhra.jpg" alt="Toyota Hilux 2026 interior" loading="lazy"/>
           </div>
           <button class="car-gallery-nav prev" onclick="slideGallery('hilux',-1)">‹</button>
           <button class="car-gallery-nav next" onclick="slideGallery('hilux',1)">›</button>
           <div class="car-gallery-dots" id="dots-hilux">
             <button class="car-dot active" onclick="goToSlide('hilux',0)"></button>
+            <button class="car-dot" onclick="goToSlide('hilux',1)"></button>
           </div>
           <span class="car-badge">Pickup</span>
           <span class="car-year">2026</span>
@@ -1088,12 +1092,14 @@
       <div class="car-card reveal reveal-delay-2" data-cat="auto">
         <div class="car-gallery" id="gallery-208">
           <div class="car-gallery-track" id="track-208">
-            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488577/PEUGEOT-208-ACTIVE-AT-T200-2025-0Km-18_ldbfxe.webp" alt="Peugeot 208 2026" loading="lazy"/>
+            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488578/imagen_1905_vdx2la.png" alt="Peugeot 208 2026" loading="lazy"/>
+            <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779488576/nuevo-peugeot-208-2025-argentina-8.jpg_kiytv4.webp" alt="Peugeot 208 2026 interior" loading="lazy"/>
           </div>
           <button class="car-gallery-nav prev" onclick="slideGallery('208',-1)">‹</button>
           <button class="car-gallery-nav next" onclick="slideGallery('208',1)">›</button>
           <div class="car-gallery-dots" id="dots-208">
             <button class="car-dot active" onclick="goToSlide('208',0)"></button>
+            <button class="car-dot" onclick="goToSlide('208',1)"></button>
           </div>
           <span class="car-badge">Auto</span>
           <span class="car-year">2026</span>
@@ -1184,37 +1190,11 @@
         </div>
       </div>
 
-      <!-- CTA Card -->
-      <div class="car-card reveal reveal-delay-3" style="background: linear-gradient(135deg, #0f0f0f 0%, #1a1509 100%); display:flex; align-items:center; justify-content:center; min-height:420px;">
-        <div style="text-align:center; padding: 3rem;">
-          <div style="font-family:var(--serif); font-size:3rem; color:var(--gold); opacity:.3; margin-bottom:1rem;">+</div>
-          <h3 style="font-family:var(--serif); font-size:1.5rem; font-weight:300; color:var(--cream); margin-bottom:.8rem;">¿Necesitás algo especial?</h3>
-          <p style="font-size:.82rem; color:var(--muted); margin-bottom:2rem; line-height:1.8;">Escribinos y diseñamos la solución ideal para tu viaje por la Patagonia.</p>
-          <a href="https://wa.me/5493510000000?text=Hola%2C+tengo+una+consulta+especial+sobre+alquiler+de+autos+en+C%C3%B3rdoba" class="btn-wa" style="display:inline-flex;" target="_blank" rel="noopener">
-            <svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Consultar
-          </a>
-        </div>
-      </div>
 
     </div>
   </section>
 
   <!-- MID CTA -->
-  <div class="mid-cta">
-    <div class="mid-cta-inner reveal">
-      <div class="section-eyebrow" style="justify-content:center;"><span>Reserva en minutos</span></div>
-      <h2>¿Listo para explorar<br><em>Córdoba?</em></h2>
-      <p>Más de 500 viajeros ya eligieron Easy Drive para recorrer Córdoba y las sierras. La reserva toma menos de 2 minutos.</p>
-      <div class="mid-cta-btns">
-        <button class="btn-primary" onclick="abrirBuscador()">Verificar disponibilidad</button>
-        <a href="https://wa.me/5493510000000?text=Hola%2C+quiero+reservar+un+auto+en+C%C3%B3rdoba" class="btn-wa" target="_blank" rel="noopener">
-          <svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp directo
-        </a>
-      </div>
-    </div>
-  </div>
 
   <!-- COMO FUNCIONA -->
   <section id="como-funciona">
@@ -1284,13 +1264,13 @@
   </section>
 
   <!-- TESTIMONIOS -->
-  <section id="testimonios">
+  <section id="testimonios" style="background:#f9f6f2;">
     <div class="reveal">
       <div class="section-eyebrow"><span>Testimonios reales</span></div>
       <h2 class="section-title">Viajeros que<br><em>ya lo vivieron</em></h2>
     </div>
     <div class="testi-grid">
-      <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-card reveal reveal-delay-1" style="background:#ffffff;border:1px solid #e2dbd2;">
         <div class="testi-source">Google · ★★★★★</div>
         <p class="testi-text">Llegamos al aeropuerto de Córdoba y el auto nos estaba esperando. La Hilux fue perfecta para recorrer las sierras y la Ruta Nacional 38. Impecable.</p>
         <div class="testi-author">
@@ -1304,7 +1284,7 @@
           </div>
         </div>
       </div>
-      <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-card reveal reveal-delay-2" style="background:#ffffff;border:1px solid #e2dbd2;">
         <div class="testi-source">Instagram · ★★★★★</div>
         <p class="testi-text">Vine desde España con mi pareja a conocer Córdoba y el interior argentino. Easy Drive superó todas las expectativas: el auto 0km, la atención por WhatsApp fue inmediata y los precios muy razonables.</p>
         <div class="testi-author">
@@ -1318,7 +1298,7 @@
           </div>
         </div>
       </div>
-      <div class="testi-card reveal reveal-delay-3">
+      <div class="testi-card reveal reveal-delay-3" style="background:#ffffff;border:1px solid #e2dbd2;">
         <div class="testi-source">Google · ★★★★★</div>
         <p class="testi-text">El Tracker 2026 fue la elección perfecta para recorrer las sierras cordobesas y los ríos. Proceso de reserva rapidísimo por WhatsApp, entrega en el hotel. Un servicio de nivel internacional.</p>
         <div class="testi-author">
