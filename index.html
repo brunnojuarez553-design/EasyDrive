@@ -11,9 +11,9 @@
   <meta property="og:type" content="website"/>
   <meta property="og:locale" content="es_AR"/>
   <!-- Preload del video hero por breakpoint — el navegador descarga solo el que aplica -->
-  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_40,vc_h264,w_480/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(max-width: 600px)"/>
-  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_45,vc_h264,w_768/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(min-width: 601px) and (max-width: 1024px)"/>
-  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_50,vc_h264,w_1280/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(min-width: 1025px)"/>
+  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_70,vc_h264,w_960/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(max-width: 600px)"/>
+  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_65,vc_h264,w_1200/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(min-width: 601px) and (max-width: 1024px)"/>
+  <link rel="preload" as="video" href="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_60,vc_h264,w_1920/v1779516396/insta_video_22736_wwun2b.mov" type="video/mp4" media="(min-width: 1025px)"/>
   <link rel="preconnect" href="https://res.cloudinary.com"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -492,7 +492,7 @@
       background-image: url('https://res.cloudinary.com/dvvuwigmy/image/upload/v1779513034/ChatGPT_Image_23_may_2026_02_08_57_ajx8wt.png');
       background-size: cover;
       background-position: center;
-      opacity: 0.28;
+      opacity: 0.10;
       z-index: 0;
     }
     #como-funciona > * { position: relative; z-index: 1; }
@@ -507,8 +507,8 @@
     .paso:last-child { border-right: none; }
     .paso-num { font-family: var(--serif); font-size: 5rem; font-weight: 300; color: rgba(184,135,58,.15); line-height: 1; position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); }
     .paso-icon { font-size: 2rem; margin-bottom: 1.5rem; position: relative; z-index: 1; }
-    .paso h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; color: var(--black); margin-bottom: .8rem; position: relative; z-index: 1; }
-    .paso p { font-size: .85rem; color: #5a5040; line-height: 1.8; position: relative; z-index: 1; }
+    .paso h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; color: #0d0b08; margin-bottom: .8rem; position: relative; z-index: 1; }
+    .paso p { font-size: .85rem; color: #1a1610; line-height: 1.8; position: relative; z-index: 1; font-weight: 400; }
 
     /* ─── TESTIMONIOS ───────────────────────────── */
     #testimonios { background: #f9f6f2; } background: #ffffff; background: var(--black); }
@@ -1112,23 +1112,23 @@
         preload="auto"
         fetchpriority="high"
         poster="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_800/v1779502851/ChatGPT_Image_22_may_2026_04_14_19_p.m._bafls6.png"
-        style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;pointer-events:none;z-index:1;background:#000;"
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;pointer-events:none;z-index:1;"
       >
-        <!-- Mobile: video liviano 480px, carga rápida en 4G/WiFi -->
+        <!-- Mobile: alta calidad para pantallas retina, ancho suficiente para cover sin pixelarse -->
         <source
-          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_40,vc_h264,w_480/v1779516396/insta_video_22736_wwun2b.mov"
+          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_70,vc_h264,w_960/v1779516396/insta_video_22736_wwun2b.mov"
           type="video/mp4"
           media="(max-width: 600px)"
         />
-        <!-- Tablet: 768px -->
+        <!-- Tablet -->
         <source
-          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_45,vc_h264,w_768/v1779516396/insta_video_22736_wwun2b.mov"
+          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_65,vc_h264,w_1200/v1779516396/insta_video_22736_wwun2b.mov"
           type="video/mp4"
           media="(max-width: 1024px)"
         />
-        <!-- Desktop: 1280px -->
+        <!-- Desktop -->
         <source
-          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_50,vc_h264,w_1280/v1779516396/insta_video_22736_wwun2b.mov"
+          src="https://res.cloudinary.com/dvvuwigmy/video/upload/f_mp4,q_60,vc_h264,w_1920/v1779516396/insta_video_22736_wwun2b.mov"
           type="video/mp4"
         />
       </video>
@@ -1308,10 +1308,11 @@
         <div class="car-gallery" id="gallery-hilux">
           <div class="car-gallery-track" id="track-hilux">
             <img
-              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/hilux-super-blanco_zeaabj.png"
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,h_480,c_fill,g_center,y_20/v1779488578/hilux-super-blanco_zeaabj.png"
               alt="Toyota Hilux 2026"
               loading="eager"
               class="pos-center"
+              style="object-position: 35% 60%;"
             />
             <img
               src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488577/HD-wallpaper-toyota-hilux-interior-pickup-cars-vehicle_aojhra.jpg"
@@ -1352,10 +1353,11 @@
         <div class="car-gallery" id="gallery-208">
           <div class="car-gallery-track" id="track-208">
             <img
-              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_auto/v1779488578/imagen_1905_vdx2la.png"
+              src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,h_480,c_fill,g_center/v1779488578/imagen_1905_vdx2la.png"
               alt="Peugeot 208 2026"
               loading="eager"
               class="pos-center"
+              style="object-position: 35% 55%;"
             />
             <img
               src="https://res.cloudinary.com/dvvuwigmy/image/upload/f_auto,q_auto,w_600,c_fill,g_center/v1779488576/nuevo-peugeot-208-2025-argentina-8.jpg_kiytv4.webp"
@@ -1846,7 +1848,7 @@
         <img src="https://res.cloudinary.com/dvvuwigmy/image/upload/v1779492200/IMG_6850_ospah5.png" alt="Easy Drive" style="height:48px;width:auto;object-fit:contain;margin-bottom:1rem;display:block;"/>
         <p>Rent a Car premium en Córdoba, Argentina. Flota 0km 2026, entrega en aeropuerto y atención 24/7 para que tu experiencia en el corazón del país sea extraordinaria.</p>
         <div class="footer-socials">
-          <a class="social-btn" href="#" title="Instagram">ig</a>
+          <a class="social-btn" href="https://www.instagram.com/rent.a.car.easydrive" target="_blank" rel="noopener" title="Instagram">ig</a>
           <a class="social-btn" href="https://wa.me/5493516458580" target="_blank" rel="noopener" title="WhatsApp">wa</a>
           <a class="social-btn" href="#" title="Facebook">fb</a>
         </div>
