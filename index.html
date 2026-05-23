@@ -88,6 +88,39 @@
     }
     .urgency-bar span { opacity: .7; margin: 0 .6rem; }
 
+    /* ── Urgency bar marquee (mobile only) ── */
+    .urgency-track {
+      display: contents; /* desktop: sin cambios */
+    }
+    .urgency-content { display: inline; }
+    .urgency-content + .urgency-content { display: none; }
+    .urgency-dot { opacity: .7; margin: 0 .6rem; }
+
+    @media (max-width: 600px) {
+      .urgency-bar {
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        padding: .45rem 0;
+      }
+      .urgency-track {
+        display: inline-flex;
+        width: max-content;
+        animation: marquee 18s linear infinite;
+      }
+      .urgency-content {
+        display: inline-block;
+        padding: 0 3rem;
+        font-size: .62rem;
+      }
+      .urgency-content + .urgency-content { display: inline-block; }
+    }
+
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
     /* ─── NAV ───────────────────────────────────── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -904,8 +937,7 @@
       .nav-logo img { height: 36px; }
 
       /* ── Urgency bar ── */
-      .urgency-bar { font-size: .6rem; padding: .45rem .8rem; line-height: 1.6;
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      /* urgency-bar mobile handled by marquee styles above */
 
       /* ── Hero ── */
       #hero { min-height: 100svh; align-items: flex-end; padding-bottom: 2.5rem; }
@@ -1056,7 +1088,10 @@
 
   <!-- URGENCY BAR -->
   <div class="urgency-bar">
-    ⚡ Temporada alta — disponibilidad limitada <span>·</span> Reservá hoy y confirmamos en minutos <span>·</span> Promociones con tarjeta de crédito
+    <div class="urgency-track">
+      <span class="urgency-content">⚡ Temporada alta — disponibilidad limitada <span class="urgency-dot">·</span> Reservá hoy y confirmamos en minutos <span class="urgency-dot">·</span> Promociones con tarjeta de crédito</span>
+      <span class="urgency-content" aria-hidden="true">⚡ Temporada alta — disponibilidad limitada <span class="urgency-dot">·</span> Reservá hoy y confirmamos en minutos <span class="urgency-dot">·</span> Promociones con tarjeta de crédito</span>
+    </div>
   </div>
 
   <!-- FLOATING WHATSAPP -->
